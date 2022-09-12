@@ -1,39 +1,51 @@
-//Création de toues les fiches canapé
+fetch ("http://localhost:3000/api/products")
+    .then((res) => res.json())
+    .then((res) => displayProducts(res))
 
-for (let i = 0; i < products.length; i++) {
-    const sectionFiches = document.querySelector ("#items");
-    
-    /*const linkElement = document.createElement ("a");
+function displayProducts(products){  
+    for (let i = 0; i < products.length; i++) {
 
-    linkElement.innerText = products[i].categorie;
+        const sectionFiches = document.querySelector ("#items");
 
-    modeleElement.appendChild (linkElement);*/
+        const linkElement = document.createElement ("a");
 
-    const modeleElement = document.createElement ("article");
+        sectionFiches.appendChild (linkElement);
 
-    const imageElement = document.createElement ("img");
+        const modeleElement = document.createElement ("article");
 
-    imageElement.src = products[i].imageUrl;
+        linkElement.appendChild (modeleElement);
 
-    modeleElement.appendChild (imageElement);
+        const imageElement = document.createElement ("img");
 
-    const altElement = document.createElement ("alt");
+        imageElement.src = products[i].imageUrl;
 
-    altElement.innerText = products[i].altTxt;
+        imageElement.alt = products[i].altTxt;
 
-    modeleElement.appendChild (altElement);
+        modeleElement.appendChild (imageElement);
 
-    const nameElement = document.createElement ("h3");
+        const nameElement = document.createElement ("h3");
 
-    nameElement.innerText = products[i].name;
+        nameElement.classList = "productName";
 
-    modeleElement.appendChild (nameElement);
+        nameElement.innerText = products[i].name;
 
-    const descriptionElement = document.createElement ("p");
+        modeleElement.appendChild (nameElement);
 
-    descriptionElement.innerText = products[i].description;
+        const descriptionElement = document.createElement ("p");
 
-    modeleElement.appendChild (descriptionElement);
+        descriptionElement.classList = "productDescription";
 
-    sectionFiches.appendChild(modeleElement);
+        descriptionElement.innerText = products[i].description;
+
+        modeleElement.appendChild (descriptionElement); 
+    }   
 }
+
+
+
+
+  
+        
+
+        
+        
