@@ -1,7 +1,9 @@
+// On récupère les données concernant les canapés
 fetch ("http://localhost:3000/api/products")
     .then((res) => res.json())
     .then((res) => displayProducts(res))
 
+// On crée et on affiche les 8 fiches produits éléments par éléments    
 function displayProducts(products){  
     for (let i = 0; i < products.length; i++) {
 
