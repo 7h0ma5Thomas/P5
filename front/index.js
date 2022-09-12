@@ -9,6 +9,10 @@ function displayProducts(products){
 
         const linkElement = document.createElement ("a");
 
+        const id = products._id
+
+        linkElement.href = "./product.html?id=" + id
+        
         sectionFiches.appendChild (linkElement);
 
         const modeleElement = document.createElement ("article");
