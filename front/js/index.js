@@ -11,9 +11,9 @@ function displayProducts(products){
 
         const linkElement = document.createElement ("a");
 
-        const id = products._id
+        const id = products[i]._id;
 
-        linkElement.href = "./product.html?id=" + id
+        linkElement.href = "./product.html?id=" + id;
         
         sectionFiches.appendChild (linkElement);
 
@@ -46,6 +46,7 @@ function displayProducts(products){
         modeleElement.appendChild (descriptionElement); 
     }   
 }
+
 
 
 
