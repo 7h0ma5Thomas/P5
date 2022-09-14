@@ -80,5 +80,17 @@ if (button != null) {
         if (color == null || color === "" || quantity == null || quantity == 0) {
             alert ("Veuillez sélectionner une couleur et une quantité svp")
         }
+
+        // on crée un objet
+        const data = {
+            id: id,
+            color: color,
+            quantity: Number(quantity),
+            price: price
+        }
+
+        // on stock les données dans le localstorage et on crée une redirection
+        localStorage.setItem (id, JSON.stringify(data))
+        window.location.href = "cart.html"
     })
 }
