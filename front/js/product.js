@@ -71,7 +71,7 @@ function chooseColor (sofa) {
  }
 
 
-// On ajoute un écouteur d'évenement au clic et on définit un message d'erreur 
+// On ajoute un écouteur d'évenement pour selctionner la couleur et la quantité au clic et on définit un message d'erreur 
 const button = document.querySelector ("#addToCart")
 
     button.addEventListener ("click", () => {
@@ -88,6 +88,6 @@ const button = document.querySelector ("#addToCart")
             quantity: Number(quantity),
         }
 
-        // on stock les données dans le localstorage et on crée une redirection
+        // on stock les données dans le localstorage
         localStorage.setItem (id, JSON.stringify(data))
     })
