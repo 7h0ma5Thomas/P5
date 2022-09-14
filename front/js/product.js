@@ -73,11 +73,11 @@ function chooseColor (sofa) {
 
 // On ajoute un écouteur d'évenement au clic et on définit un message d'erreur 
 const button = document.querySelector ("#addToCart")
-if (button != null) {
-    button.addEventListener ("click", (e) => {
+
+    button.addEventListener ("click", () => {
         const color = document.querySelector ("#colors").value
         const quantity = document.querySelector ("#quantity").value
-        if (color == null || color === "" || quantity == null || quantity == 0) {
+        if (color === "" || quantity == 0) {
             alert ("Veuillez sélectionner une couleur et une quantité svp")
         }
 
@@ -86,11 +86,8 @@ if (button != null) {
             id: id,
             color: color,
             quantity: Number(quantity),
-            price: price
         }
 
         // on stock les données dans le localstorage et on crée une redirection
         localStorage.setItem (id, JSON.stringify(data))
-        window.location.href = "cart.html"
     })
-}
