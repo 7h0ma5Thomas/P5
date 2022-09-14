@@ -1,7 +1,10 @@
+// On va récupérer l'id des produits
 const queryString = window.location.search
 const urlParams = new URLSearchParams (queryString)
 const id = urlParams.get ("id")
 
+
+// On ouvre la page products avec l'id correspondant à l'élément choisi via l'api
 fetch (`http://localhost:3000/api/products/${id}`)
     .then((response) => response.json())
     .then((res) => showImage(res))
@@ -48,6 +51,8 @@ function showDescription (sofa) {
     chooseColor (sofa)
 }
 
+
+// On récupère et on ajoute les différentes options de couleurs
 function chooseColor (sofa) {
     for (let i=0; i < sofa.colors.length; i++){
 
@@ -64,3 +69,16 @@ function chooseColor (sofa) {
         sofaColor.appendChild(color);
     }   
  }
+
+
+// On ajoute un écouteur d'évenement au clic et on définit un message d'erreur 
+const button = document.querySelector ("#addToCart")
+if (button != null) {
+    button.addEventListener ("click", (e) => {
+        const color = document.querySelector ("#colors").value
+        const quantity = document.querySelector ("#quantity").value
+        if (color == null || color === "" || quantity == null || quantity == 0) {
+            alert ("Veuillez sélectionner une couleur et une quantité svp")
+        }
+    })
+}
