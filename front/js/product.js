@@ -10,7 +10,6 @@ fetch (`http://localhost:3000/api/products/${id}`)
     .then((res) => showImage(res))
 
 function showImage (sofa) {
-
     const sofaImg = document.querySelector(".item__img");
 
     const photo = document.createElement ("img");
@@ -26,27 +25,27 @@ function showImage (sofa) {
 
 function showName (sofa) {
 
-    //const sofaName = document.querySelector("#title");
+    const sofaName = document.querySelector("#title");
 
-    title.innerText = sofa.name;
+    sofaName.innerText = sofa.name;
 
     showPrice (sofa)
 }
 
 function showPrice (sofa) {
 
-    //const sofaPrice = document.querySelector("#price");
+    const sofaPrice = document.querySelector("#price");
 
-    price.innerText = sofa.price;
+    sofaPrice.innerText = sofa.price;
 
     showDescription (sofa)
 }
 
 function showDescription (sofa) {
 
-   //const sofaDescription = document.querySelector("#description");
+    const sofaDescription = document.querySelector("#description");
 
-    description.innerText = sofa.description;
+    sofaDescription.innerText = sofa.description;
 
     chooseColor (sofa)
 }
