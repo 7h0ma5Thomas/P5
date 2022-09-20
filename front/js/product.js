@@ -9,6 +9,7 @@ fetch (`http://localhost:3000/api/products/${id}`)
     .then((response) => response.json())
     .then((res) => showImage(res))
 
+    
 function showImage (sofa) {
     const sofaImg = document.querySelector(".item__img");
 
@@ -70,23 +71,43 @@ function chooseColor (sofa) {
  }
 
 
-// On ajoute un écouteur d'évenement pour selctionner la couleur et la quantité au clic et on définit un message d'erreur 
+// On ajoute un écouteur d'évenement pour selctionner la couleur et la quantité au clic
 const button = document.querySelector ("#addToCart")
 
     button.addEventListener ("click", () => {
         const color = document.querySelector ("#colors").value
         const quantity = document.querySelector ("#quantity").value
-        if (color === "" || quantity == 0) {
-            alert ("Veuillez sélectionner une couleur et une quantité svp")
-        }
 
-        // on crée un objet
+         // on crée un objet
         const data = {
             id: id,
             color: color,
             quantity: Number(quantity),
         }
 
-        // on stock les données dans le localstorage
-        localStorage.setItem (id, JSON.stringify(data))
-    })
+        // On rattache la couleur à l'id
+        const idAndColor = id + color
+
+        // Si les champs sont vides on affiche une alerte, sinon on récupère le panier
+        if (color === "" || quantity == 0) {
+            alert ("Veuillez sélectionner une couleur et une quantité svp")
+        }else{
+            // Variable qui permet de récuperer les produits en fonctions de leur id ET de leur couleur
+            let getCart = localStorage.getItem(idAndColor)
+        
+        // Si le panier est plein on récupère les donnés, sinon on le déclare "undefined" car il est vide  
+        if (getCart != null) {
+            parsedGetCart = JSON.parse(getCart)
+        }else{
+            parsedGetCart = undefined
+        }
+
+        // Si le panier est vide on ajoute le(s) produit(s), sinon on modifie la quantité du(es) produit(s) déjà ajouté(s)
+        if (parsedGetCart == undefined) {
+            localStorage.setItem (idAndColor, JSON.stringify(data))
+        }else{
+            parsedGetCart.quantity = parsedGetCart.quantity + data.quantity
+            localStorage.setItem (idAndColor, JSON.stringify(parsedGetCart))
+        }
+    }})
+
