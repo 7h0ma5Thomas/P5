@@ -78,15 +78,17 @@ button.addEventListener("click", () => {
     const color = document.querySelector("#colors").value
     const quantity = document.querySelector("#quantity").value
 
+    // On récupère le contenu du panier si celui-ci est plein, sinon on affiche un tableau vide
     let getCart = localStorage.getItem("parsedGetCart") ? JSON.parse(localStorage.getItem("parsedGetCart")) : []
 
-    // on crée un objet
+    // On crée un objet
     const product = {
         id: id,
         color: color,
         quantity: Number (quantity),
     };
 
+    // On utilise une fonction pour ajouter un produit au panier et l'enregistrer dans le localStorage
     function addProduct(product, cart) {
         cart.push(product);
         localStorage.setItem("parsedGetCart", JSON.stringify(cart));
@@ -95,22 +97,22 @@ button.addEventListener("click", () => {
 
     
 let sameProductColor= false
-    //on parcoure le tableau avec une boucle pour savoir si le produit est bien dans le tableau getCart
+    //on parcourt le tableau avec une boucle pour savoir si le produit est bien présent dans celui-ci
     for (i = 0; i < getCart.length; i++) {
-        console.log(getCart[i].quantity);
+        // si le produit est déjà présent dans la même couleur, on modifie seulement la quantité
         if (((getCart[i]).id == id) && (getCart[i].color == color)) {
             sameProductColor= true
-            console.log(quantity);
             getCart[i].quantity += parseInt(quantity)
             localStorage.setItem("parsedGetCart", JSON.stringify(getCart));
         }
     } 
+    // si le produit n'est pas déjà présent, on l'ajoute au panier
     if (!sameProductColor) {
         getCart = addProduct(product, getCart)
     }
     
 });
 
-//enregistrement du localStorage
+//On enregistre le contenu du localStorage dans le panier
 getCart = JSON.parse(localStorage.getItem("parsedGetCart"));
 
