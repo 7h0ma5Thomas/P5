@@ -78,6 +78,7 @@ button.addEventListener("click", () => {
     const color = document.querySelector("#colors").value
     const quantity = document.querySelector("#quantity").value
 
+    // On utilise une condition pour afficher une alerte en cas de champs non slélctionnés
     if (color == null || color === "" || quantity == null || quantity == 0) {
         if (color === "" || quantity == 0) {
             alert("Veuillez sélectionner une couleur et une quantité svp")
