@@ -10,6 +10,10 @@ function getCartContent() {
                 products.forEach(product => {
                     if (product._id === cartProduct.id) {
                         displayImage(product, i)
+                        displayProductContent(product, i)
+                        displayDescription (product, i)
+                        displaySettings (product, i)
+                        displayQuantity (product, i)
                     }
                 })
             })
@@ -44,6 +48,63 @@ function displayImage(product, i) {
     image.src = product.imageUrl
 
     div.appendChild(image)
+}
+
+function displayProductContent(product, i) {
+
+    const div = document.createElement("div")
+
+    div.classList = "cart__item__content"
+
+    document.querySelectorAll(".cart__item")[i].appendChild(div)
+}
+
+function displayDescription (product, i) {
+
+    const div = document.createElement("div")
+
+    div.classList = "cart__item__content__description"
+
+    document.querySelectorAll(".cart__item__content")[i].appendChild(div)
+
+    const name = document.createElement("h2")
+
+    name.innerText = product.name
+
+    div.appendChild(name)
+
+    const color = document.createElement("p")
+
+    color.innerText = product.colors[i]
+
+    div.appendChild(color)
+
+    const price = document.createElement("p")
+
+    price.innerText = product.price +",00" + "€"
+
+    div.appendChild(price)
+}
+
+function displaySettings (product, i) {
+
+    const div = document.createElement("div")
+
+    div.classList = "cart__item__content__settings"
+
+    document.querySelectorAll(".cart__item__content")[i].appendChild(div)
+
+}
+
+function displayQuantity (product, i) {
+
+    const div = document.createElement("div")
+
+    div.classList = "cart__item__content__settings__quantity"
+
+    document.querySelectorAll(".cart__item__content__settings")
+
+    // INPUT quantité
 }
 
 getCartContent()
