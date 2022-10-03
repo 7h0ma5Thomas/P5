@@ -1,5 +1,5 @@
 let cartProducts = JSON.parse(localStorage.getItem("parsedGetCart"));
-console.log(cartProducts);
+
 
 function getCartContent() {
     fetch("http://localhost:3000/api/products")
@@ -25,10 +25,6 @@ function displayProduct(cartProduct) {
     const article = document.createElement("article")
 
     article.classList = "cart__item"
-
-    article.dataset.id = cartProduct.id
-
-    article.dataset.color = cartProduct.color
 
     const cart__items = document.querySelector("#cart__items")
 
@@ -76,6 +72,7 @@ function displayDescription (product, i) {
     const color = document.createElement("p")
 
     color.innerText = product.colors[i]
+    console.log(product);
 
     div.appendChild(color)
 
@@ -108,3 +105,4 @@ function displayQuantity (product, i) {
 }
 
 getCartContent()
+
