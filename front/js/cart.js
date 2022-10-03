@@ -1,5 +1,5 @@
 let cartProducts = JSON.parse(localStorage.getItem("parsedGetCart"));
-
+console.log(cartProducts);
 
 function getCartContent() {
     fetch("http://localhost:3000/api/products")
@@ -14,6 +14,7 @@ function getCartContent() {
                         displayDescription (product, i)
                         displaySettings (product, i)
                         displayQuantity (product, i)
+                        displayDelete (product, i)
                     }
                 })
             })
@@ -72,7 +73,6 @@ function displayDescription (product, i) {
     const color = document.createElement("p")
 
     color.innerText = product.colors[i]
-    console.log(product);
 
     div.appendChild(color)
 
@@ -99,9 +99,40 @@ function displayQuantity (product, i) {
 
     div.classList = "cart__item__content__settings__quantity"
 
-    document.querySelectorAll(".cart__item__content__settings")
+    document.querySelectorAll(".cart__item__content__settings")[i].appendChild(div)
 
-    // INPUT quantité
+    const quantity = document.createElement("p")
+
+    quantity.innerText = "Qté : "
+
+    div.appendChild(quantity)
+
+    const input = document.createElement("input")
+
+    input.classList = "itemQuantity"
+
+    div.appendChild(input)  
+}
+
+function displayDelete (product, i) {
+
+    const div = document.createElement("div")
+
+    div.classList = "cart__item__content__settings__delete"
+
+    document.querySelectorAll(".cart__item__content__settings")[i].appendChild(div)
+
+    const deleteButton = document.createElement("button")
+
+    deleteButton.classList = "deleteItem"
+
+    div.appendChild(deleteButton)
+
+    const text = document.createElement("p")
+
+    text.innerText = "Supprimer"
+
+    deleteButton.appendChild(text) 
 }
 
 getCartContent()
