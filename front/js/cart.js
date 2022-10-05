@@ -1,6 +1,12 @@
 let cartProducts = JSON.parse(localStorage.getItem("parsedGetCart"));
 console.log(cartProducts);
 
+let cart = [];
+
+let totalProducts = 0;
+
+let totalPrice = 0;
+
 function getCartContent() {
     fetch("http://localhost:3000/api/products")
         .then((res) => res.json())
@@ -9,12 +15,15 @@ function getCartContent() {
                 displayProduct(cartProduct)
                 products.forEach(product => {
                     if (product._id === cartProduct.id) {
+                        cart.push (product)
                         displayImage(product, i)
                         displayProductContent(product, i)
                         displayDescription (product, i)
                         displaySettings (product, i)
                         displayQuantity (product, i)
                         displayDelete (product, i)
+                        displayTotalProducts (product, i)
+                        displayTotalPrice (product, i)
                     }
                 })
             })
@@ -72,7 +81,7 @@ function displayDescription (product, i) {
 
     const color = document.createElement("p")
 
-    color.innerText = product.colors[i]
+    color.innerText = cartProducts[i].color
 
     div.appendChild(color)
 
@@ -109,9 +118,24 @@ function displayQuantity (product, i) {
 
     const input = document.createElement("input")
 
+    input.type = "number"
+
     input.classList = "itemQuantity"
 
-    div.appendChild(input)  
+    input.name = "itemQuantity"
+
+    input.min = 1
+
+    input.max = 100
+
+    input.value = cartProducts[i].quantity
+
+    div.appendChild(input) 
+
+    input.addEventListener("change", (product) => {
+        
+        console.log(input);
+    })
 }
 
 function displayDelete (product, i) {
@@ -122,18 +146,44 @@ function displayDelete (product, i) {
 
     document.querySelectorAll(".cart__item__content__settings")[i].appendChild(div)
 
-    const deleteButton = document.createElement("button")
-
-    deleteButton.classList = "deleteItem"
-
-    div.appendChild(deleteButton)
-
     const text = document.createElement("p")
+    
+    text.classList = "deleteItem"
 
     text.innerText = "Supprimer"
 
-    deleteButton.appendChild(text) 
+    div.appendChild(text) 
 }
 
-getCartContent()
+function displayTotalProducts (product, i) {
 
+    const totalQuantity = document.querySelector("#totalQuantity")
+
+    const itemQuantity = cartProducts[i].quantity
+
+    totalProducts += itemQuantity
+
+    totalQuantity.innerText = totalProducts
+}
+
+function displayTotalPrice (product, i) {
+
+    const spanTotalPrice = document.querySelector("#totalPrice")
+
+    const itemQuantity = cartProducts[i].quantity
+    console.log("quantité d'article : " + itemQuantity);
+
+    const itemPrice = product.price
+    console.log("prix d'un article : " + itemPrice);
+
+    const itemTotalPrice = itemQuantity * itemPrice
+    console.log("prix en fonction du nombre d'article : " + itemTotalPrice);
+
+    totalPrice += itemTotalPrice
+    console.log(totalPrice);
+
+    spanTotalPrice.innerText = totalPrice
+}
+
+
+getCartContent()
