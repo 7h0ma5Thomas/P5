@@ -2,6 +2,7 @@ let cartProducts = JSON.parse(localStorage.getItem("parsedGetCart"));
 console.log(cartProducts);
 
 let cart = [];
+console.log(cart);
 
 let totalProducts = 0;
 
@@ -12,17 +13,17 @@ function getCartContent() {
         .then((res) => res.json())
         .then((products) => {
             cartProducts.forEach((cartProduct, i) => {
-                displayProduct(cartProduct)
+                displayProduct()
                 products.forEach(product => {
                     if (product._id === cartProduct.id) {
                         cart.push (product)
                         displayImage(product, i)
-                        displayProductContent(product, i)
+                        displayProductContent(i)
                         displayDescription (product, i)
-                        displaySettings (product, i)
-                        displayQuantity (product, i)
-                        displayDelete (product, i)
-                        displayTotalProducts (product, i)
+                        displaySettings (i)
+                        displayQuantity (i)
+                        displayDelete (i)
+                        displayTotalProducts (i)
                         displayTotalPrice (product, i)
                     }
                 })
@@ -30,7 +31,7 @@ function getCartContent() {
         })
 }
 
-function displayProduct(cartProduct) {
+function displayProduct() {
 
     const article = document.createElement("article")
 
@@ -56,7 +57,7 @@ function displayImage(product, i) {
     div.appendChild(image)
 }
 
-function displayProductContent(product, i) {
+function displayProductContent(i) {
 
     const div = document.createElement("div")
 
@@ -92,7 +93,7 @@ function displayDescription (product, i) {
     div.appendChild(price)
 }
 
-function displaySettings (product, i) {
+function displaySettings (i) {
 
     const div = document.createElement("div")
 
@@ -102,7 +103,7 @@ function displaySettings (product, i) {
 
 }
 
-function displayQuantity (product, i) {
+function displayQuantity (i) {
 
     const div = document.createElement("div")
 
@@ -132,13 +133,21 @@ function displayQuantity (product, i) {
 
     div.appendChild(input) 
 
-    input.addEventListener("change", (product) => {
-        
-        console.log(input);
-    })
+    input.addEventListener("change", () => updateQuantityAndPrice(i, input.value))
 }
 
-function displayDelete (product, i) {
+function updateQuantityAndPrice (i, newValue) {
+
+    cartProducts[i].quantity = Number(newValue)
+
+    localStorage.setItem("parsedGetCart", JSON.stringify(cartProducts));
+
+    
+
+    // rafraichir la page
+}
+
+function displayDelete (i) {
 
     const div = document.createElement("div")
 
@@ -153,15 +162,30 @@ function displayDelete (product, i) {
     text.innerText = "Supprimer"
 
     div.appendChild(text) 
+
+    div.addEventListener("click", () => deleteProduct(i))
 }
 
-function displayTotalProducts (product, i) {
+function deleteProduct(i) {
+
+    cartProducts.splice(i)
+
+    localStorage.setItem("parsedGetCart", JSON.stringify(cartProducts));
+
+    let cartItems = document.getElementsByClassName("cart__item")
+
+    cartItems[i].remove()
+ 
+    console.log(cartItems); 
+}
+
+function displayTotalProducts (i) {
 
     const totalQuantity = document.querySelector("#totalQuantity")
 
     const itemQuantity = cartProducts[i].quantity
 
-    totalProducts += itemQuantity
+    totalProducts += itemQuantity //à modifier
 
     totalQuantity.innerText = totalProducts
 }
@@ -171,19 +195,68 @@ function displayTotalPrice (product, i) {
     const spanTotalPrice = document.querySelector("#totalPrice")
 
     const itemQuantity = cartProducts[i].quantity
-    console.log("quantité d'article : " + itemQuantity);
 
     const itemPrice = product.price
-    console.log("prix d'un article : " + itemPrice);
 
     const itemTotalPrice = itemQuantity * itemPrice
-    console.log("prix en fonction du nombre d'article : " + itemTotalPrice);
 
-    totalPrice += itemTotalPrice
-    console.log(totalPrice);
+    totalPrice += itemTotalPrice //à modifier ?
 
     spanTotalPrice.innerText = totalPrice
 }
 
+function order() {
+
+    const orderButton = document.querySelector("#order")
+
+    orderButton.addEventListener("click", (e) => submitForm(e))
+
+}
+
+function submitForm(e) {
+
+    e.preventDefault()
+
+    if (cart.length === 0) alert("Veuillez ajouter un produit à votre panier svp")
+
+    const form = document.querySelector(".cart__order__form")
+
+    const body = makeRequestBody()
+
+    fetch("http://localhost:3000/api/products/order", {
+
+        method: "POST",
+        body: JSON.stringify(body),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+        .then((res) => res.json())
+        .then((data) => console.log(data))
+
+    //console.log(form.elements);
+
+}
+
+function makeRequestBody() {
+
+    const body = {
+
+        contact: {
+
+            firstName: "firstName",
+            lastName: "lastName",
+            adress: "adress",
+            city: "city",
+            email: "email"
+        },
+
+        products: ["products"]
+    }
+
+    return body
+}
 
 getCartContent()
+
+order()
