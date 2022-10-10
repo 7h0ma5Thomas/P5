@@ -133,18 +133,22 @@ function displayQuantity (i) {
 
     div.appendChild(input) 
 
-    input.addEventListener("change", () => updateQuantityAndPrice(i, input.value))
+    input.addEventListener("change", () => updateQuantity(i, input.value))
 }
 
-function updateQuantityAndPrice (i, newValue) {
+function updateQuantity (i, newValue) {
+
+    const oldValue = cartProducts[i].quantity
 
     cartProducts[i].quantity = Number(newValue)
 
     localStorage.setItem("parsedGetCart", JSON.stringify(cartProducts));
 
-    
+    const totalQuantity = document.querySelector("#totalQuantity")
 
-    // rafraichir la page
+    totalProducts += newValue - oldValue
+
+    totalQuantity.innerText = totalProducts 
 }
 
 function displayDelete (i) {
@@ -185,7 +189,7 @@ function displayTotalProducts (i) {
 
     const itemQuantity = cartProducts[i].quantity
 
-    totalProducts += itemQuantity //à modifier
+    totalProducts += itemQuantity
 
     totalQuantity.innerText = totalProducts
 }
@@ -200,63 +204,23 @@ function displayTotalPrice (product, i) {
 
     const itemTotalPrice = itemQuantity * itemPrice
 
-    totalPrice += itemTotalPrice //à modifier ?
+    totalPrice += itemTotalPrice
 
-    spanTotalPrice.innerText = totalPrice
+    spanTotalPrice.innerText = totalPrice  
 }
 
-function order() {
 
-    const orderButton = document.querySelector("#order")
+//On définit des regex
 
-    orderButton.addEventListener("click", (e) => submitForm(e))
+let FirstAndLastName = /[\wàéèâêäëçù-]{2,}/m
 
-}
+let adress = /[\w\W\sàéèâêäëçù]{3,}/m
 
-function submitForm(e) {
+let city = /[\sa-zA-Zàéèâêäëçù-]{1,}/m
 
-    e.preventDefault()
+let mail = /[\w\Wàéèâêäëçù]+@([\w\Wàéèâêäëçù]+\.)+[a-zA-Z]{2,}/m
 
-    if (cart.length === 0) alert("Veuillez ajouter un produit à votre panier svp")
 
-    const form = document.querySelector(".cart__order__form")
 
-    const body = makeRequestBody()
-
-    fetch("http://localhost:3000/api/products/order", {
-
-        method: "POST",
-        body: JSON.stringify(body),
-        headers: {
-            "Content-Type": "application/json"
-        }
-    })
-        .then((res) => res.json())
-        .then((data) => console.log(data))
-
-    //console.log(form.elements);
-
-}
-
-function makeRequestBody() {
-
-    const body = {
-
-        contact: {
-
-            firstName: "firstName",
-            lastName: "lastName",
-            adress: "adress",
-            city: "city",
-            email: "email"
-        },
-
-        products: ["products"]
-    }
-
-    return body
-}
 
 getCartContent()
-
-order()

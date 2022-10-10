@@ -64,8 +64,6 @@ function chooseColor(sofa) {
 
         color.text = sofa.colors[i];
 
-        console.log(sofa.colors[i]);
-
         sofaColor.appendChild(color);
     }
 }
