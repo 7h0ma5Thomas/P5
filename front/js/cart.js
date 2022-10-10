@@ -212,15 +212,106 @@ function displayTotalPrice (product, i) {
 
 //On définit des regex
 
-let FirstAndLastName = /[\wàéèâêäëçù-]{2,}/m
+let firstAndLastName = /[\wàéèâêäëçù-]{2,}/m
 
-let adress = /[\w\W\sàéèâêäëçù]{3,}/m
+let addressReg = /[\w\W\sàéèâêäëçù]{3,}/m
 
-let city = /[\sa-zA-Zàéèâêäëçù-]{1,}/m
+let cityReg = /[\sa-zA-Zàéèâêäëçù-]{1,}/m
 
-let mail = /[\w\Wàéèâêäëçù]+@([\w\Wàéèâêäëçù]+\.)+[a-zA-Z]{2,}/m
+let mailReg = /[\w\Wàéèâêäëçù]+@([\w\Wàéèâêäëçù]+\.)+[a-zA-Z]{2,}/m
 
 
+
+const firstName = document.querySelector("#firstName")
+
+firstName.addEventListener("input", () => {
+
+    if(!firstAndLastName.test(firstName.value) || firstName.value === "") {
+        const errorMessage = document.querySelector("#firstNameErrorMsg")
+        errorMessage.innerText = "Veuillez saisir un prénom valide";
+    } else {
+        const nameAdded = document.querySelector("#firstNameErrorMsg")
+        nameAdded.innerText = ""
+    }
+});
+
+
+
+const lastName = document.querySelector("#lastName")
+
+lastName.addEventListener("input", () => {
+
+    if(!firstAndLastName.test(lastName.value) || lastName.value === "") {
+        const errorMessage = document.querySelector("#lastNameErrorMsg")
+        errorMessage.innerText = "Veuillez saisir un nom valide";
+    } else {
+        const nameAdded = document.querySelector("#lastNameErrorMsg")
+        nameAdded.innerText = ""
+    }
+});
+
+
+const address = document.querySelector("#address")
+
+address.addEventListener("input", () => {
+
+    if(!addressReg.test(address.value) || address.value === "") {
+        const errorMessage = document.querySelector("#addressErrorMsg")
+        errorMessage.innerText = "Veuillez saisir une adresse valide";
+    } else {
+        const addressAdded = document.querySelector("#addressErrorMsg")
+        addressAdded.innerText = ""
+    }
+});
+
+
+const city = document.querySelector("#city")
+
+city.addEventListener("input", () => {
+
+    if(!cityReg.test(city.value) || city.value === "") {
+        const errorMessage = document.querySelector("#cityErrorMsg")
+        errorMessage.innerText = "Veuillez saisir une ville valide";
+    } else {
+        const cityAdded = document.querySelector("#cityErrorMsg")
+        cityAdded.innerText = ""
+    }
+});
+
+
+const mail = document.querySelector("#email")
+
+mail.addEventListener("input", () => {
+
+    if(!mailReg.test(mail.value) || mail.value === "") {
+        const errorMessage = document.querySelector("#emailErrorMsg")
+        errorMessage.innerText = "Veuillez saisir une adresse email valide";
+    } else {
+        const mailAdded = document.querySelector("#emailErrorMsg")
+        mailAdded.innerText = ""
+    }
+});
+
+
+const Order = document.querySelector("#order")
+
+Order.addEventListener("click", (e) => {
+
+    e.preventDefault();
+
+    const contact = {
+
+        firstName: firstName,
+        lastName: lastName,
+        address: address,
+        city: city,
+        email: mail
+
+    }
+    console.log(contact);
+
+    
+})
 
 
 getCartContent()
