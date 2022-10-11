@@ -1,8 +1,6 @@
 let cartProducts = JSON.parse(localStorage.getItem("parsedGetCart"));
-console.log(cartProducts);
 
 let cart = [];
-console.log(cart);
 
 let totalProducts = 0;
 
@@ -16,20 +14,21 @@ function getCartContent() {
                 displayProduct()
                 products.forEach(product => {
                     if (product._id === cartProduct.id) {
-                        cart.push (product)
+                        cart.push (cartProduct)
                         displayImage(product, i)
                         displayProductContent(i)
-                        displayDescription (product, i)
-                        displaySettings (i)
-                        displayQuantity (i)
-                        displayDelete (i)
-                        displayTotalProducts (i)
-                        displayTotalPrice (product, i)
+                        displayDescription(product, i)
+                        displaySettings(i)
+                        displayQuantity(i)
+                        displayDelete(i)
+                        displayTotalProducts(i)
+                        displayTotalPrice(product, i)
                     }
                 })
             })
         })
 }
+
 
 function displayProduct() {
 
@@ -308,9 +307,16 @@ Order.addEventListener("click", (e) => {
         email: mail
 
     }
-    console.log(contact);
 
-    
+    let products = []
+
+    for (i = 0; i < cart.length; i ++ ) {
+
+        products.push(cart[i])
+    }
+        
+        console.log(products);
+
 })
 
 
