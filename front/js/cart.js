@@ -1,9 +1,6 @@
 let cartProducts = JSON.parse(localStorage.getItem("parsedGetCart"));
-
 let cart = [];
-
 let totalProducts = 0;
-
 let totalPrice = 0;
 
 function getCartContent() {
