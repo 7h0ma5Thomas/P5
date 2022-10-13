@@ -132,7 +132,7 @@ function displayTotalPrice(product, i) {
 }
 
 function verifyAndValidateForm(cart) {
-    let firstAndLastName = /[\wàéèâêäëçù-]{2,}/m
+    let firstAndLastName = /[a-zA-Zàéèâêäëçù-]{2,}/m
     let addressReg = /[\w\W\sàéèâêäëçù]{3,}/m
     let cityReg = /[\sa-zA-Zàéèâêäëçù-]{1,}/m
     let mailReg = /[\w\Wàéèâêäëçù]+@([\w\Wàéèâêäëçù]+\.)+[a-zA-Z]{2,}/m
@@ -210,10 +210,10 @@ function verifyAndValidateForm(cart) {
             alert("Veuillez remplir tous les champs svp")
             return
         }
-        if (cart = []) {
+        /*if (cart = []) {
             alert("Votre panier est vide")
             return
-        }
+        }*/
         let products = []
         for (i = 0; i < cart.length; i++) {
             products.push(cart[i].id)
