@@ -207,7 +207,11 @@ function verifyAndValidateForm(cart) {
             addressReg.test(contact.address) === false ||
             cityReg.test(contact.city) === false ||
             mailReg.test(contact.email) === false) {
-            alert("Veuillez remplir les champs svp")
+            alert("Veuillez remplir tous les champs svp")
+            return
+        }
+        if (cart = []) {
+            alert("Votre panier est vide")
             return
         }
         let products = []
@@ -237,8 +241,8 @@ function postOrder(stringOrder) {
     fetch("http://localhost:3000/api/products/order", stringOrder)
         .then(res => res.json())
         .then(data => {
-            localStorage.setItem("order_Id", data.orderId),
-                document.location.href = "confirmation.html?id=" + data.order_Id
+            localStorage.setItem("orderId", data.orderId),
+                document.location.href = "confirmation.html?id=" + data.orderId
         })
 }
 
