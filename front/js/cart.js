@@ -145,24 +145,31 @@ function displayDelete(i, product) {
     div.addEventListener("click", (e) => deleteProduct(e, i, product))
 }
 
-// Fonction appelée dans l'écouteur d'évenement utilisé pour supprimer  
-// le produit en le retirant du localstorage que l'on met à jour,
+// Fonction appelée dans l'écouteur d'évenement   
+// utilisée pour supprimer le produit du panier en le retirant du localstorage que l'on met à jour,
 // ainsi qu'en le retirant du DOM
 function deleteProduct(e, i, product) {
+    // ???
     const oldQuantity = e.target.closest(".cart__item__content__settings").firstChild.lastChild.value
 
+    // On met à jour la quantité total du panier
     const totalQuantity = document.querySelector("#totalQuantity")
     totalProducts -= oldQuantity
     totalQuantity.innerText = totalProducts
 
+    // On met à jour le prix total du panier
     const totalPrice = document.querySelector("#totalPrice")
     totalPrices -= product.price * oldQuantity
     totalPrice.innerText = totalPrices
 
+    // On vide le local storage et on le met à jour
     cartProducts.splice([i], 1)
     localStorage.setItem("parsedGetCart", JSON.stringify(cartProducts));
+    // On récupère dans le DOM le parent 
     let cartItem = e.target.closest(".cart__item")
+    // On supprime le produit du panier
     cartItem.remove()
+    // On renvoie un tableau vide
     cart = []
 }
 
@@ -195,7 +202,9 @@ function verifyAndValidateForm(cart, i) {
     let cityReg = /[\sa-zA-Zàéèâêäëçù-]{1,}/m
     let mailReg = /[\w\Wàéèâêäëçù]+@([\w\Wàéèâêäëçù]+\.)+[a-zA-Z]{2,}/m
 
-    // 
+    // On vérifie que les champs de formulaire sont remplis convenablement 
+    // en les comparant aux regex définies précédemment, si ceux-ci sont
+    // incorrectes, on envoie un message d'erreur, sinon les champs sont valides
     const firstName = document.querySelector("#firstName")
     firstName.addEventListener("input", () => {
         if (!firstAndLastName.test(firstName.value) || firstName.value === "") {
@@ -251,9 +260,13 @@ function verifyAndValidateForm(cart, i) {
         }
     });
 
+    // On utilise un écouteur d'évenement au click pour valider 
+    // la commande après vérification du panier et du formulaire
     const submitOrder = document.querySelector("#order")
     submitOrder.addEventListener("click", (e) => {
+        // On bloque l'acutalisation de la page
         e.preventDefault();
+        // on créé un objet "contact"
         const contact = {
             firstName: firstName.value,
             lastName: lastName.value,
@@ -261,6 +274,7 @@ function verifyAndValidateForm(cart, i) {
             city: city.value,
             email: mail.value
         }
+        // Si les champs de formulaires sont vides, on envoie une alerte
         if (firstAndLastName.test(contact.firstName) === false ||
             firstAndLastName.test(contact.lastName) === false ||
             addressReg.test(contact.address) === false ||
@@ -269,23 +283,31 @@ function verifyAndValidateForm(cart, i) {
             alert("Veuillez remplir tous les champs svp")
             return
         }
+        // Si le panier est vide, on envoie une alerte
         if (cart = []) {
             alert("Votre panier est vide")
             return
         }
+        // On créé un tableau contenant les produits du panier
         let products = []
         for (i = 0; i < cart.length; i++) {
             products.push(cart[i].id)
         }
+        // On créé un objet global qui
+        // contient l'objet "contact" 
+        // et le tableaux "products"
         const order = {
             contact,
             products,
         }
-        prePostOrder(order)
+        // On appelle la fonction
+        PostOrder(order)
     })
 }
 
-function prePostOrder(order) {
+// On envoie notre objet global
+// sous forme de "chaîne" à l'API 
+function PostOrder(order) {
     const stringOrder = {
         method: "POST",
         body: JSON.stringify(order),
@@ -293,10 +315,12 @@ function prePostOrder(order) {
             "Content-Type": "application/json"
         }
     }
-    postOrder(stringOrder)
+    // On appelle la fonction
+    prePostOrder(stringOrder)
 }
 
-function postOrder(stringOrder) {
+// ???
+function prePostOrder(stringOrder) {
     fetch("http://localhost:3000/api/products/order", stringOrder)
         .then(res => res.json())
         .then(data => {
@@ -305,5 +329,6 @@ function postOrder(stringOrder) {
         })
 }
 
+// On appelle les fonctions
 getCartContent()
 verifyAndValidateForm(cart)

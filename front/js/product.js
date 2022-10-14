@@ -70,7 +70,7 @@ button.addEventListener("click", () => {
 
     // On utilise une condition pour afficher une alerte 
     // en cas de champs non slélctionnés
-    if (color === "" || parseInt(quantity === 0)) {
+    if (color === "" || quantity == 0) {
         alert("Veuillez sélectionner une couleur et une quantité svp")
     } else {
         // On récupère le contenu du panier si celui-ci est plein dans le localstorage, 
