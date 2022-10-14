@@ -5,7 +5,7 @@ let cart = [];
 // On défini la quantité totals d'articles du panier à 0
 let totalProducts = 0;
 // On défini la veleur du prix total du panier à 0
-let totalPrice = 0;
+let totalPrices = 0;
 
 // On utilise cette fonction pour récupérer les informations de nos produits
 // via l'API et les relier au DOM pour les afficher sur notre site
@@ -28,8 +28,8 @@ function getCartContent() {
                         displayProductContent(i)
                         displayDescription(product, i)
                         displaySettings(i)
-                        displayQuantity(i)
-                        displayDelete(i)
+                        displayQuantity(i, product)
+                        displayDelete(i, product)
                         displayTotalProducts(i)
                         displayTotalPrice(product, i)
                     }
@@ -95,7 +95,7 @@ function displaySettings(i) {
 // On créé un "input" pour afficher et rendre modifiable la quantité 
 // de chaque produit, que l'on récupère via le localstorage, puis on
 // au DOM pour l'afficher sur notre site
-function displayQuantity(i) {
+function displayQuantity(i, product) {
     const div = document.createElement("div")
     div.classList = "cart__item__content__settings__quantity"
     document.querySelectorAll(".cart__item__content__settings")[i].appendChild(div)
@@ -111,25 +111,30 @@ function displayQuantity(i) {
     input.value = cartProducts[i].quantity
     div.appendChild(input)
     // On utilise un écouteur d'évenement pour mettre à jour la quantité modifiée
-    input.addEventListener("change", () => updateQuantity(i, input.value))
+    input.addEventListener("change", () => updateQuantity(i, input.value, product))
 }
 
 // On modifie la quantité totale d'article(s) dans le panier
 // en fonction de la quantité modifiée via "l'input" pour un 
-// ou plusieurs article(s), puis on la relie au DOM
-function updateQuantity(i, newValue) {
-    const oldValue = cartProducts[i].quantity
-    cartProducts[i].quantity = Number(newValue)
+// ou plusieurs article(s), on modifie également prix total du panier,
+//  puis on les relie au DOM
+function updateQuantity(i, newQuantity, product) {
+    const oldQuantity = cartProducts[i].quantity
+    cartProducts[i].quantity = Number(newQuantity)
     localStorage.setItem("parsedGetCart", JSON.stringify(cartProducts));
     const totalQuantity = document.querySelector("#totalQuantity")
-    totalProducts += newValue - oldValue
+    totalProducts += newQuantity - oldQuantity
     totalQuantity.innerText = totalProducts
+
+    const totalPrice = document.querySelector('#totalPrice')
+    totalPrices += product.price * (newQuantity - oldQuantity)
+    totalPrice.innerText = totalPrices
 }
 
 // On créé et on affiche le bouton "supprimer" en le reliant
 // au DOM, puis on ajoute un écouteur d'évenement au click 
 // pour supprimer le produit via une autre fonction
-function displayDelete(i) {
+function displayDelete(i, product) {
     const div = document.createElement("div")
     div.classList = "cart__item__content__settings__delete"
     document.querySelectorAll(".cart__item__content__settings")[i].appendChild(div)
@@ -137,17 +142,28 @@ function displayDelete(i) {
     text.classList = "deleteItem"
     text.innerText = "Supprimer"
     div.appendChild(text)
-    div.addEventListener("click", () => deleteProduct(i))
+    div.addEventListener("click", (e) => deleteProduct(e, i, product))
 }
 
 // Fonction appelée dans l'écouteur d'évenement utilisé pour supprimer  
 // le produit en le retirant du localstorage que l'on met à jour,
 // ainsi qu'en le retirant du DOM
-function deleteProduct(i) {
-    cartProducts.splice(i)
+function deleteProduct(e, i, product) {
+    const oldQuantity = e.target.closest(".cart__item__content__settings").firstChild.lastChild.value
+
+    const totalQuantity = document.querySelector("#totalQuantity")
+    totalProducts -= oldQuantity
+    totalQuantity.innerText = totalProducts
+
+    const totalPrice = document.querySelector("#totalPrice")
+    totalPrices -= product.price * oldQuantity
+    totalPrice.innerText = totalPrices
+
+    cartProducts.splice([i], 1)
     localStorage.setItem("parsedGetCart", JSON.stringify(cartProducts));
-    let cartItems = document.getElementsByClassName("cart__item")
-    cartItems[i].remove()
+    let cartItem = e.target.closest(".cart__item")
+    cartItem.remove()
+    cart = []
 }
 
 // On affiche la quantité totale de produit(s) du panier 
@@ -166,13 +182,13 @@ function displayTotalPrice(product, i) {
     const itemQuantity = cartProducts[i].quantity
     const itemPrice = product.price
     const itemTotalPrice = itemQuantity * itemPrice
-    totalPrice += itemTotalPrice
-    spanTotalPrice.innerText = totalPrice
+    totalPrices += itemTotalPrice
+    spanTotalPrice.innerText = totalPrices
 }
 
 // On verifie que les champs du formulaire soient correctement
 // remplis afin de valider et finaliser la commande  
-function verifyAndValidateForm(cart) {
+function verifyAndValidateForm(cart, i) {
     // On déclare nos Regex (expressions régulières)
     let firstAndLastName = /[a-zA-Zàéèâêäëçù-]{2,}/m
     let addressReg = /[\w\W\sàéèâêäëçù]{3,}/m
@@ -230,7 +246,7 @@ function verifyAndValidateForm(cart) {
             const errorMessage = document.querySelector("#emailErrorMsg")
             errorMessage.innerText = "Veuillez saisir une adresse email valide";
         } else {
-            const addressAdded = document.querySelector("#cityErrorMsg")
+            const addressAdded = document.querySelector("#emailErrorMsg")
             addressAdded.innerText = ""
         }
     });
@@ -253,10 +269,10 @@ function verifyAndValidateForm(cart) {
             alert("Veuillez remplir tous les champs svp")
             return
         }
-        /*if (cart = []) {
+        if (cart = []) {
             alert("Votre panier est vide")
             return
-        }*/
+        }
         let products = []
         for (i = 0; i < cart.length; i++) {
             products.push(cart[i].id)
