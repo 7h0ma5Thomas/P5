@@ -1,15 +1,26 @@
+// On récupère nos éléments contenu dans le localstorage
 let cartProducts = JSON.parse(localStorage.getItem("parsedGetCart"));
+// On déclare un tableau vide "cart"
 let cart = [];
+// On défini la quantité totals d'articles du panier à 0
 let totalProducts = 0;
+// On défini la veleur du prix total du panier à 0
 let totalPrice = 0;
 
+// On utilise cette fonction pour récupérer les informations de nos produits
+// via l'API et les relier au DOM pour les afficher sur notre site
 function getCartContent() {
     fetch("http://localhost:3000/api/products")
         .then((res) => res.json())
         .then((products) => {
+            // On boucle sur notre tableau de produits récupéré via le localstorage
+            // puis on récupère chaque produit et leur index pour les relier au DOM
             cartProducts.forEach((cartProduct, i) => {
                 displayProduct()
+                // ??? ??? ???
                 products.forEach(product => {
+                    // On ajoute au panier nos produits en fonction de leur id
+                    // et on relie leurs informations au DOM via des fonctions
                     if (product._id === cartProduct.id) {
                         cartProduct.price = product.price * cartProducts[i].quantity
                         cart.push(cartProduct)
@@ -27,6 +38,8 @@ function getCartContent() {
         })
 }
 
+// On créé un article qui contient un produit et ses infos
+// et on le relie au DOM
 function displayProduct() {
     const article = document.createElement("article")
     article.classList = "cart__item"
@@ -34,6 +47,8 @@ function displayProduct() {
     cart__items.appendChild(article)
 }
 
+// On récupère via l'API l'image du/des produit(s) ajouté(s) au panier
+// et on la relie au DOM pour l'afficher sur notre site
 function displayImage(product, i) {
     const div = document.createElement("div")
     div.classList = "cart__item__img"
@@ -43,12 +58,17 @@ function displayImage(product, i) {
     div.appendChild(image)
 }
 
+// On créé un conteneur pour afficher les infos du/des produit(s)
+// et on le relie au DOM
 function displayProductContent(i) {
     const div = document.createElement("div")
     div.classList = "cart__item__content"
     document.querySelectorAll(".cart__item")[i].appendChild(div)
 }
 
+// On récupère via l'API le nom et le prix du/des produit(s),
+// ainsi que leur couleur via le localstorage et on les relie
+// au DOM pour les afficher sur notre site
 function displayDescription(product, i) {
     const div = document.createElement("div")
     div.classList = "cart__item__content__description"
@@ -64,12 +84,17 @@ function displayDescription(product, i) {
     div.appendChild(price)
 }
 
+// On créé un conteneur pour afficher les quantités modifiables
+// et le bouton supprimer que l'on relie au DOM
 function displaySettings(i) {
     const div = document.createElement("div")
     div.classList = "cart__item__content__settings"
     document.querySelectorAll(".cart__item__content")[i].appendChild(div)
 }
 
+// On créé un "input" pour afficher et rendre modifiable la quantité 
+// de chaque produit, que l'on récupère via le localstorage, puis on
+// au DOM pour l'afficher sur notre site
 function displayQuantity(i) {
     const div = document.createElement("div")
     div.classList = "cart__item__content__settings__quantity"
@@ -85,9 +110,13 @@ function displayQuantity(i) {
     input.max = 100
     input.value = cartProducts[i].quantity
     div.appendChild(input)
+    // On utilise un écouteur d'évenement pour mettre à jour la quantité modifiée
     input.addEventListener("change", () => updateQuantity(i, input.value))
 }
 
+// On modifie la quantité totale d'article(s) dans le panier
+// en fonction de la quantité modifiée via "l'input" pour un 
+// ou plusieurs article(s), puis on la relie au DOM
 function updateQuantity(i, newValue) {
     const oldValue = cartProducts[i].quantity
     cartProducts[i].quantity = Number(newValue)
@@ -97,6 +126,9 @@ function updateQuantity(i, newValue) {
     totalQuantity.innerText = totalProducts
 }
 
+// On créé et on affiche le bouton "supprimer" en le reliant
+// au DOM, puis on ajoute un écouteur d'évenement au click 
+// pour supprimer le produit via une autre fonction
 function displayDelete(i) {
     const div = document.createElement("div")
     div.classList = "cart__item__content__settings__delete"
@@ -108,6 +140,9 @@ function displayDelete(i) {
     div.addEventListener("click", () => deleteProduct(i))
 }
 
+// Fonction appelée dans l'écouteur d'évenement utilisé pour supprimer  
+// le produit en le retirant du localstorage que l'on met à jour,
+// ainsi qu'en le retirant du DOM
 function deleteProduct(i) {
     cartProducts.splice(i)
     localStorage.setItem("parsedGetCart", JSON.stringify(cartProducts));
@@ -115,6 +150,8 @@ function deleteProduct(i) {
     cartItems[i].remove()
 }
 
+// On affiche la quantité totale de produit(s) du panier 
+// en additionnant la quantité de chaque produit
 function displayTotalProducts(i) {
     const totalQuantity = document.querySelector("#totalQuantity")
     const itemQuantity = cartProducts[i].quantity
@@ -122,6 +159,8 @@ function displayTotalProducts(i) {
     totalQuantity.innerText = totalProducts
 }
 
+// On affiche le prix total pour chaque produit en multipliant leur quantité 
+// par leur prix et en additionnant toutes les valeurs obtenues
 function displayTotalPrice(product, i) {
     const spanTotalPrice = document.querySelector("#totalPrice")
     const itemQuantity = cartProducts[i].quantity
@@ -131,12 +170,16 @@ function displayTotalPrice(product, i) {
     spanTotalPrice.innerText = totalPrice
 }
 
+// On verifie que les champs du formulaire soient correctement
+// remplis afin de valider et finaliser la commande  
 function verifyAndValidateForm(cart) {
+    // On déclare nos Regex (expressions régulières)
     let firstAndLastName = /[a-zA-Zàéèâêäëçù-]{2,}/m
     let addressReg = /[\w\W\sàéèâêäëçù]{3,}/m
     let cityReg = /[\sa-zA-Zàéèâêäëçù-]{1,}/m
     let mailReg = /[\w\Wàéèâêäëçù]+@([\w\Wàéèâêäëçù]+\.)+[a-zA-Z]{2,}/m
 
+    // 
     const firstName = document.querySelector("#firstName")
     firstName.addEventListener("input", () => {
         if (!firstAndLastName.test(firstName.value) || firstName.value === "") {
