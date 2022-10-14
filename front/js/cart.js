@@ -165,7 +165,7 @@ function deleteProduct(e, i, product) {
     // On vide le local storage et on le met à jour
     cartProducts.splice([i], 1)
     localStorage.setItem("parsedGetCart", JSON.stringify(cartProducts));
-    // On récupère dans le DOM le parent 
+    // On récupère le parent dans le DOM 
     let cartItem = e.target.closest(".cart__item")
     // On supprime le produit du panier
     cartItem.remove()

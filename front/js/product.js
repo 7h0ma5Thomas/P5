@@ -69,9 +69,9 @@ button.addEventListener("click", () => {
     const quantity = document.querySelector("#quantity").value
 
     // On utilise une condition pour afficher une alerte 
-    // en cas de champs non slélctionnés
-    if (color === "" || quantity == 0) {
-        alert("Veuillez sélectionner une couleur et une quantité svp")
+    // en cas de champs non slélctionnés ou incorrects
+    if (color === "" || quantity == 0 || quantity > 100 ) {
+        alert("Veuillez sélectionner une couleur et une quantité valide svp")
     } else {
         // On récupère le contenu du panier si celui-ci est plein dans le localstorage, 
         // sinon on stocke un tableau vide dans la variable
