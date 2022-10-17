@@ -286,8 +286,7 @@ function verifyAndValidateForm(cart, i) {
             return
         }
         // Si le panier est vide, on envoie une alerte
-        if (cart = []) {
-            console.log(cart);
+        if (cart.length <= 0) {
             alert("Votre panier est vide")
             return
         }
