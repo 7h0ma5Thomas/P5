@@ -151,7 +151,7 @@ function displayDelete(i, product) {
 // utilisée pour supprimer le produit du panier en le retirant du localstorage que l'on met à jour,
 // ainsi qu'en le retirant du DOM
 function deleteProduct(e, i, product) {
-    // ???
+    // On récupère l'ancienne valeur de notre produit
     const oldQuantity = e.target.closest(".cart__item__content__settings").firstChild.lastChild.value
 
     // On met à jour la quantité total du panier
