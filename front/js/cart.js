@@ -15,12 +15,14 @@ function getCartContent() {
         .then((products) => {
             // On boucle sur notre tableau de produits récupéré via le localstorage
             // puis on récupère chaque produit et leur index pour les relier au DOM
+            // en appelant la fonction 
             cartProducts.forEach((cartProduct, i) => {
                 displayProduct()
-                // ??? ??? ???
+                // On boucle sur notre tableau pour récupérer les infos de nos produits
+                // que l'on reliera au DOM en appelant nos fonctions
                 products.forEach(product => {
                     // On ajoute au panier nos produits en fonction de leur id
-                    // et on relie leurs informations au DOM via des fonctions
+                    // et on appelle nos fonctions
                     if (product._id === cartProduct.id) {
                         cartProduct.price = product.price * cartProducts[i].quantity
                         cart.push(cartProduct)
@@ -285,6 +287,7 @@ function verifyAndValidateForm(cart, i) {
         }
         // Si le panier est vide, on envoie une alerte
         if (cart = []) {
+            console.log(cart);
             alert("Votre panier est vide")
             return
         }
@@ -300,6 +303,7 @@ function verifyAndValidateForm(cart, i) {
             contact,
             products,
         }
+        console.log(order);
         // On appelle la fonction
         PostOrder(order)
     })
@@ -319,7 +323,9 @@ function PostOrder(order) {
     prePostOrder(stringOrder)
 }
 
-// ???
+// On récupère l'id de notre commande, puis on effectue
+// la re-direction vers la page de confirmation en fonction 
+// de celui-ci
 function prePostOrder(stringOrder) {
     fetch("http://localhost:3000/api/products/order", stringOrder)
         .then(res => res.json())
