@@ -4,7 +4,7 @@ const urlParams = new URLSearchParams(queryString)
 const id = urlParams.get("id")
 
 // On ouvre la page products en intégrant dans l'URL l'id correspondant 
-// à l'élément choisi via l'api
+// au produit choisi via l'api pour l'afficher sur la page
 fetch(`http://localhost:3000/api/products/${id}`)
     .then((response) => response.json())
     .then((res) => showImage(res))
@@ -58,7 +58,7 @@ const button = document.querySelector("#addToCart")
 // On ajoute un produit au panier et on l'enregistre dans le localStorage
 function addProduct(product, cart) {
     cart.push(product);
-    localStorage.setItem("parsedGetCart", JSON.stringify(cart));
+    localStorage.setItem("cartInLs", JSON.stringify(cart));
     return cart
 }
 
@@ -75,7 +75,7 @@ button.addEventListener("click", () => {
     } else {
         // On récupère le contenu du panier si celui-ci est plein dans le localstorage, 
         // sinon on stocke un tableau vide dans la variable
-        let cartProducts = localStorage.getItem("parsedGetCart") ? JSON.parse(localStorage.getItem("parsedGetCart")) : []
+        let cartProducts = localStorage.getItem("cartInLs") ? JSON.parse(localStorage.getItem("cartInLs")) : []
 
         // On crée un objet "product"
         const product = {
@@ -84,16 +84,16 @@ button.addEventListener("click", () => {
             quantity: Number(quantity),
         };
 
-        // On déclare une variable pour un produit déja ajouté dans une couleur choisie
+        // On déclare une variable pour un produit déja ajouté avec sa couleur choisie
         // et on lui donne le booléen "false"
         let sameProductColor = false
-        // On parcourt le tableau avec une boucle pour savoir si le produit est bien présent dans celui-ci
+        // On parcourt le tableau pour savoir si le produit est bien présent dans celui-ci
         cartProducts.forEach(cartProduct => {
             // si le produit est déjà présent dans la même couleur, on modifie seulement la quantité
             if (cartProduct.id == id && cartProduct.color == color) {
                 sameProductColor = true
                 cartProduct.quantity += parseInt(quantity)
-                localStorage.setItem("parsedGetCart", JSON.stringify(cartProducts));
+                localStorage.setItem("cartInLs", JSON.stringify(cartProducts));
             }
         })
         // Si le produit n'est pas déjà présent, on l'ajoute au panier

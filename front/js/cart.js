@@ -1,5 +1,5 @@
 // On récupère nos éléments contenu dans le localstorage
-let cartProducts = JSON.parse(localStorage.getItem("parsedGetCart"));
+let cartProducts = JSON.parse(localStorage.getItem("cartInLs"));
 // On déclare un tableau vide "cart"
 let cart = [];
 // On défini la quantité totals d'articles du panier à 0
@@ -7,22 +7,22 @@ let totalProducts = 0;
 // On défini la veleur du prix total du panier à 0
 let totalPrices = 0;
 
-// On utilise cette fonction pour récupérer les informations de nos produits
-// via l'API et les relier au DOM pour les afficher sur notre site
+// On utilise cette fonction pour récupérer l'ensemble de nos produits ainsi
+// que leurs infos via l'API, et les relier au DOM pour les afficher sur notre site
 function getCartContent() {
     fetch("http://localhost:3000/api/products")
         .then((res) => res.json())
         .then((products) => {
-            // On boucle sur notre tableau de produits récupéré via le localstorage
-            // puis on récupère chaque produit et leur index pour les relier au DOM
-            // en appelant la fonction 
+            // On parcourt notre tableau de produits contenu dans le localstorage
+            // puis on récupère chaque produit ajouté précedemment, avec leurs infos 
+            // pour les relier au DOM en appelant la fonction 
             cartProducts.forEach((cartProduct, i) => {
                 displayProduct()
-                // On boucle sur notre tableau pour récupérer les infos de nos produits
-                // que l'on reliera au DOM en appelant nos fonctions
+                // On parcourt le tableau que nous renvoie l'API 
+                // pour récupérer chaque produit avec leurs infos
                 products.forEach(product => {
-                    // On ajoute au panier nos produits en fonction de leur id
-                    // et on appelle nos fonctions
+                    // On ajoute au panier nos produits en fonction de leur id,
+                    // et on appelle nos fonctions pour les afficher sur notre site
                     if (product._id === cartProduct.id) {
                         cartProduct.price = product.price * cartProducts[i].quantity
                         cart.push(cartProduct)
@@ -123,7 +123,7 @@ function displayQuantity(i, product) {
 function updateQuantity(i, newQuantity, product) {
     const oldQuantity = cartProducts[i].quantity
     cartProducts[i].quantity = Number(newQuantity)
-    localStorage.setItem("parsedGetCart", JSON.stringify(cartProducts));
+    localStorage.setItem("cartInLs", JSON.stringify(cartProducts));
     const totalQuantity = document.querySelector("#totalQuantity")
     totalProducts += newQuantity - oldQuantity
     totalQuantity.innerText = totalProducts
@@ -166,7 +166,7 @@ function deleteProduct(e, i, product) {
 
     // On vide le local storage et on le met à jour
     cartProducts.splice([i], 1)
-    localStorage.setItem("parsedGetCart", JSON.stringify(cartProducts));
+    localStorage.setItem("cartInLs", JSON.stringify(cartProducts));
     // On récupère le parent dans le DOM 
     let cartItem = e.target.closest(".cart__item")
     // On supprime le produit du panier
@@ -302,7 +302,6 @@ function verifyAndValidateForm(cart, i) {
             contact,
             products,
         }
-        console.log(order);
         // On appelle la fonction
         PostOrder(order)
     })
