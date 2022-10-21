@@ -144,13 +144,13 @@ function displayDelete(i, product) {
     text.classList = "deleteItem"
     text.innerText = "Supprimer"
     div.appendChild(text)
-    div.addEventListener("click", (e) => deleteProduct(e, i, product))
+    div.addEventListener("click", (e) => deleteProduct(e, product))
 }
 
 // Fonction appelée dans l'écouteur d'évenement   
 // utilisée pour supprimer le produit du panier en le retirant du localstorage que l'on met à jour,
 // ainsi qu'en le retirant du DOM
-function deleteProduct(e, i, product) {
+function deleteProduct(e, product) {
     // On récupère l'ancienne valeur de notre produit
     const oldQuantity = e.target.closest(".cart__item__content__settings").firstChild.lastChild.value
 
@@ -165,7 +165,11 @@ function deleteProduct(e, i, product) {
     totalPrice.innerText = totalPrices
 
     // On vide le local storage et on le met à jour
-    cartProducts.splice([i], 1)
+    cartProducts.forEach((p, i) => {
+        if(p.id === product._id) {
+            cartProducts.splice(i, 1)
+        }
+    })
     localStorage.setItem("cartInLs", JSON.stringify(cartProducts));
     // On récupère le parent dans le DOM 
     let cartItem = e.target.closest(".cart__item")
@@ -201,7 +205,7 @@ function verifyAndValidateForm(cart, i) {
     // On déclare nos Regex (expressions régulières)
     let firstAndLastName = /[a-zA-Zàéèâêäëçù-]{2,}/m
     let addressReg = /[\w\W\sàéèâêäëçù]{3,}/m
-    let cityReg = /[\sa-zA-Zàéèâêäëçù-]{1,}/m
+    let cityReg = /[\sa-zA-Zàéèâêäëçù-]{2,}/m
     let mailReg = /[\w\Wàéèâêäëçù]+@([\w\Wàéèâêäëçù]+\.)+[a-zA-Z]{2,}/m
 
     // On vérifie que les champs de formulaire sont remplis convenablement 
@@ -286,7 +290,7 @@ function verifyAndValidateForm(cart, i) {
             return
         }
         // Si le panier est vide, on envoie une alerte
-        if (cart.length <= 0) {
+        if (cart.length <= 0 || cartProducts.length <= 0) {
             alert("Votre panier est vide")
             return
         }
