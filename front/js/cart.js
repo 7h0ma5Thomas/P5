@@ -164,9 +164,13 @@ function deleteProduct(e, product) {
     totalPrices -= product.price * oldQuantity
     totalPrice.innerText = totalPrices
 
+    // On récupère l'élément voisin de la classe la plus proche dans le DOM
+    // puis on récupère ses enfants sous forme de tableau
+    const color = e.target.closest(".cart__item__content__settings").previousSibling.childNodes[1].innerText
+
     // On vide le local storage et on le met à jour
     cartProducts.forEach((p, i) => {
-        if(p.id === product._id) {
+        if(p.id === product._id && p.color === color) {
             cartProducts.splice(i, 1)
         }
     })
