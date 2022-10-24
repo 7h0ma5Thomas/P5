@@ -1,10 +1,11 @@
-// On récupére l'id de nos produits
+// On modifie l'URL de notre page en y intégrant l'id du produit
+// choisi précédemment pour n'afficher que celui-ci
 const queryString = window.location.search
 const urlParams = new URLSearchParams(queryString)
 const id = urlParams.get("id")
 
-// On ouvre la page products en intégrant dans l'URL l'id correspondant 
-// au produit choisi via l'api pour l'afficher sur la page
+// On communiqque avec l'API pour récupérer les infos du produit
+// choisi, grace à son id, afin des les afficher sur notre site
 fetch(`http://localhost:3000/api/products/${id}`)
     .then((response) => response.json())
     .then((res) => showImage(res))
